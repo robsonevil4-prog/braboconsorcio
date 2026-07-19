@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { MessageCircle, Calculator, ArrowRight, Pause, Play } from "lucide-react";
+import { MessageCircle, Calculator, ArrowRight, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import Image from "next/image";
 import ScrollIndicator from "./ScrollIndicator";
 
@@ -21,7 +21,8 @@ const itemVariants = {
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(true);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -34,14 +35,38 @@ export default function Hero() {
     }
   };
 
-  useEffect(() => {
+  const toggleMute = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = !videoRef.current.muted;
+    setMuted(videoRef.current.muted);
+  };
+
+  const attemptPlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => setPlaying(true)).catch(() => setPlaying(false));
+    video.muted = true;
+    const p = video.play();
+    if (p !== undefined) {
+      p.then(() => {
+        setPlaying(true);
+        video.muted = false;
+        setMuted(false);
+      }).catch(() => {
+        setPlaying(false);
+      });
     }
   }, []);
+
+  useEffect(() => {
+    attemptPlay();
+    const handleInteraction = () => attemptPlay();
+    document.addEventListener("click", handleInteraction, { once: true });
+    document.addEventListener("touchstart", handleInteraction, { once: true });
+    return () => {
+      document.removeEventListener("click", handleInteraction);
+      document.removeEventListener("touchstart", handleInteraction);
+    };
+  }, [attemptPlay]);
 
   return (
     <section id="hero" className="relative w-full min-h-screen lg:h-screen overflow-hidden">
@@ -60,13 +85,13 @@ export default function Hero() {
         animate="visible"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8 lg:py-0">
-          <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-12">
             <motion.div
               variants={itemVariants}
-                className="flex items-center justify-center relative lg:order-2 max-lg:mt-2 max-lg:mb-2"
+                className="flex items-center justify-center relative lg:order-2 max-lg:mt-2 max-lg:mb-2 self-center"
             >
               <motion.div
-                className="relative w-full max-w-sm aspect-[9/16] rounded-2xl overflow-hidden glass-light p-2 max-lg:max-w-[160px]"
+                className="relative w-full max-w-sm aspect-[9/16] rounded-2xl overflow-hidden glass-light p-2 max-lg:max-w-[140px]"
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               >
@@ -76,18 +101,28 @@ export default function Hero() {
                     autoPlay
                     playsInline
                     disableRemotePlayback
+                    muted
                     className="w-full h-full object-cover"
                   >
                     <source src="/videos/hero-bg.mp4" type="video/mp4" />
                   </video>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
-                  <button
-                    onClick={togglePlay}
-                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-all z-10"
-                    aria-label={playing ? "Pausar" : "Tocar"}
-                  >
-                    {playing ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
-                  </button>
+                  <div className="absolute top-2 right-2 flex gap-2 z-10">
+                    <button
+                      onClick={toggleMute}
+                      className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-all"
+                      aria-label={muted ? "Ativar som" : "Desativar som"}
+                    >
+                      {muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                    </button>
+                    <button
+                      onClick={togglePlay}
+                      className="w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-all"
+                      aria-label={playing ? "Pausar" : "Tocar"}
+                    >
+                      {playing ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
+                    </button>
+                  </div>
                   <div className="absolute bottom-2 left-2">
                     <Image
                       src="/images/logo.png"
@@ -101,7 +136,7 @@ export default function Hero() {
               </motion.div>
             </motion.div>
 
-            <div className="text-center lg:text-left flex flex-col justify-center lg:min-h-[70vh] lg:order-1">
+            <div className="text-center lg:text-left flex flex-col justify-center self-center lg:order-1">
               <motion.h1
                 variants={itemVariants}
                 className="text-3xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-black leading-[1.15] lg:leading-[1.2] font-[family-name:var(--font-montserrat)]"

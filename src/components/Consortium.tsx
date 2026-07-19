@@ -7,6 +7,7 @@ import {
   Building2,
   Truck,
   ArrowRight,
+  MessageCircle,
 } from "lucide-react";
 import { consortiumCards } from "@/data";
 
@@ -70,10 +71,16 @@ export default function Consortium() {
                     <p className="text-sm text-[#BDBDBD] leading-relaxed flex-1">
                       {card.description}
                     </p>
-                    <button className="mt-4 flex items-center gap-2 text-[#E10600] font-semibold text-sm group/btn">
+                    <a
+                      href="https://api.whatsapp.com/message/JAZA6LV6DKJYC1?autoload=1&app_absent=0&utm_source=ig"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 flex items-center gap-2 text-[#E10600] font-semibold text-sm group/btn"
+                    >
+                      <MessageCircle className="w-4 h-4" />
                       Saiba Mais
                       <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                    </button>
+                    </a>
                   </div>
                 </div>
               </motion.div>

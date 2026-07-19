@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { MessageCircle, Calculator, ArrowRight } from "lucide-react";
+import { MessageCircle, Calculator, ArrowRight, Pause, Play } from "lucide-react";
 import Image from "next/image";
 import ScrollIndicator from "./ScrollIndicator";
 
@@ -19,12 +20,31 @@ const itemVariants = {
 };
 
 export default function Hero() {
-  const scrollTo = (id: string) => {
-    document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(true);
+
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+      setPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setPlaying(false);
+    }
   };
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => setPlaying(true)).catch(() => setPlaying(false));
+    }
+  }, []);
+
   return (
-    <section id="hero" className="relative w-full h-screen overflow-hidden">
+    <section id="hero" className="relative w-full min-h-screen lg:h-screen overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-[#090909] via-[#0a0a0a] to-[#090909]" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30" />
 
@@ -39,12 +59,52 @@ export default function Hero() {
         initial="hidden"
         animate="visible"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-center lg:text-left flex flex-col justify-center lg:min-h-[70vh]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8 lg:py-0">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+            <motion.div
+              variants={itemVariants}
+                className="flex items-center justify-center relative lg:order-2 max-lg:mt-2 max-lg:mb-2"
+            >
+              <motion.div
+                className="relative w-full max-w-sm aspect-[9/16] rounded-2xl overflow-hidden glass-light p-2 max-lg:max-w-[160px]"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <div className="w-full h-full rounded-xl overflow-hidden border border-white/5 relative">
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    disableRemotePlayback
+                    className="w-full h-full object-cover"
+                  >
+                    <source src="/videos/hero-bg.mp4" type="video/mp4" />
+                  </video>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
+                  <button
+                    onClick={togglePlay}
+                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-all z-10"
+                    aria-label={playing ? "Pausar" : "Tocar"}
+                  >
+                    {playing ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
+                  </button>
+                  <div className="absolute bottom-2 left-2">
+                    <Image
+                      src="/images/logo.png"
+                      alt="Brabo Consórcios"
+                      width={140}
+                      height={40}
+                      className="w-auto h-8 object-contain opacity-90"
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            <div className="text-center lg:text-left flex flex-col justify-center lg:min-h-[70vh] lg:order-1">
               <motion.h1
                 variants={itemVariants}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-black leading-[1.2] font-[family-name:var(--font-montserrat)]"
+                className="text-3xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-black leading-[1.15] lg:leading-[1.2] font-[family-name:var(--font-montserrat)]"
               >
                 <span className="text-white">Realize seu</span>
                 <br />
@@ -57,7 +117,7 @@ export default function Hero() {
 
               <motion.p
                 variants={itemVariants}
-                className="mt-6 text-base sm:text-lg text-[#BDBDBD] max-w-lg leading-relaxed mx-auto lg:mx-0"
+                className="mt-4 lg:mt-6 text-sm sm:text-lg text-[#BDBDBD] max-w-lg leading-relaxed mx-auto lg:mx-0"
               >
                 Especialistas em automóveis, motos, imóveis e investimentos
                 inteligentes.
@@ -65,7 +125,7 @@ export default function Hero() {
 
               <motion.div
                 variants={itemVariants}
-                className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                className="mt-6 lg:mt-8 flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center lg:justify-start"
               >
                 <a
                   href="https://api.whatsapp.com/message/JAZA6LV6DKJYC1?autoload=1&app_absent=0&utm_source=ig"
@@ -88,38 +148,6 @@ export default function Hero() {
                 </a>
               </motion.div>
             </div>
-
-            <motion.div
-              variants={itemVariants}
-              className="hidden lg:flex items-center justify-center relative"
-            >
-              <motion.div
-                className="relative w-full max-w-sm aspect-[9/16] rounded-2xl overflow-hidden glass-light p-2"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <div className="w-full h-full rounded-xl overflow-hidden border border-white/5 relative">
-                  <video
-                    autoPlay
-                    playsInline
-                    disableRemotePlayback
-                    className="w-full h-full object-cover"
-                  >
-                    <source src="/videos/hero-bg.mp4" type="video/mp4" />
-                  </video>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
-                  <div className="absolute bottom-4 left-4">
-                    <Image
-                      src="/images/logo.png"
-                      alt="Brabo Consórcios"
-                      width={280}
-                      height={80}
-                      className="w-auto h-20 object-contain opacity-90"
-                    />
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
           </div>
         </div>
       </motion.div>

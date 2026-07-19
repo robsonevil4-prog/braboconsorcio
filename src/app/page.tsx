@@ -8,7 +8,6 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Consortium from "@/components/Consortium";
 import Gallery from "@/components/Gallery";
-import Videos from "@/components/Videos";
 import Numbers from "@/components/Numbers";
 import Differentials from "@/components/Differentials";
 import Testimonials from "@/components/Testimonials";
@@ -43,7 +42,6 @@ export default function Home() {
         <Numbers />
         <Differentials />
         <Gallery />
-        <Videos />
         <Testimonials />
         <CTA />
       </main>

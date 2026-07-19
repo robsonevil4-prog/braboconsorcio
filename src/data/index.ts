@@ -32,28 +32,12 @@ export const timeline = [
   },
 ];
 
-export const galleryFilters = [
-  { label: "Todos", value: "all" },
-  { label: "Clientes", value: "clients" },
-  { label: "Entregas", value: "deliveries" },
-  { label: "Eventos", value: "events" },
-  { label: "Conquistas", value: "achievements" },
-  { label: "Vídeos", value: "videos" },
-];
-
 export const galleryItems = [
-  { id: 1, src: "/images/gallery/clients/placeholder.jpg", alt: "Cliente Brabo", category: "clients", width: 600, height: 800 },
-  { id: 2, src: "/images/gallery/deliveries/placeholder.jpg", alt: "Entrega Brabo", category: "deliveries", width: 800, height: 600 },
-  { id: 3, src: "/images/gallery/events/placeholder.jpg", alt: "Evento Brabo", category: "events", width: 800, height: 800 },
-  { id: 4, src: "/images/gallery/achievements/placeholder.jpg", alt: "Conquista Brabo", category: "achievements", width: 600, height: 600 },
-  { id: 5, src: "/images/gallery/clients/placeholder.jpg", alt: "Cliente Brabo 2", category: "clients", width: 800, height: 600 },
-  { id: 6, src: "/images/gallery/deliveries/placeholder.jpg", alt: "Entrega Brabo 2", category: "deliveries", width: 600, height: 800 },
-  { id: 7, src: "/images/gallery/events/placeholder.jpg", alt: "Evento Brabo 2", category: "events", width: 800, height: 800 },
-  { id: 8, src: "/images/gallery/achievements/placeholder.jpg", alt: "Conquista Brabo 2", category: "achievements", width: 600, height: 600 },
-  { id: 9, src: "/images/gallery/videos/placeholder.jpg", alt: "Vídeo Brabo", category: "videos", width: 800, height: 600 },
-  { id: 10, src: "/images/gallery/clients/placeholder.jpg", alt: "Cliente Brabo 3", category: "clients", width: 600, height: 800 },
-  { id: 11, src: "/images/gallery/deliveries/placeholder.jpg", alt: "Entrega Brabo 3", category: "deliveries", width: 800, height: 600 },
-  { id: 12, src: "/images/gallery/events/placeholder.jpg", alt: "Evento Brabo 3", category: "events", width: 600, height: 800 },
+  { id: 1, src: "/images/gallery/all/SaveClip.App_504285728_18051159443421331_5135658780621385830_n.jpg", alt: "Cliente Brabo" },
+  { id: 2, src: "/images/gallery/all/SaveClip.App_531607392_18055300466421331_6327604381496769919_n.jpg", alt: "Cliente Brabo" },
+  { id: 3, src: "/images/gallery/all/SaveClip.App_658861033_18078103766390927_3247338507264505631_n.jpg", alt: "Cliente Brabo" },
+  { id: 4, src: "/images/gallery/all/SaveClip.App_660787787_18075771065399302_7292199548889562084_n.jpg", alt: "Cliente Brabo" },
+  { id: 5, src: "/images/gallery/all/SaveClip.App_661711360_18205780387336755_254091682096126597_n.jpg", alt: "Cliente Brabo" },
 ];
 
 export const consortiumCards = [
